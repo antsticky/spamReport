@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+  mongo-db:
+    container_name: report-db
+    image: mongo:7-jammy
+    restart: always
+    env_file: ./.env
+    ports:
+      - ${DB_PORT_OUT}:${DB_PORT_IN}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PWD}
+    volumes:
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
+  fast-api:
+    container_name: report-api
+    restart: always
+    depends_on:
+      - mongo-db
+    env_file: ./.env
+    build:
+      context: ./rest-app
+      dockerfile: Dockerfile
+    ports:
+      - ${API_PORT_OUT}:${API_PORT_IN}
+    volumes:
+      - ./rest-app:/usr/local/report_api
+  react-web:
+    container_name: report-web
+    env_file: ./.env
+    build: ./web
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - ./web/node_modules:/react-docker/node_modules
+      - ./web:/react-docker
+    ports:
+      - ${REACT_APP_PORT_OUT}:${REACT_APP_PORT_IN}
+    depends_on: 
+      - mongo-db
+      - fast-api

@@ -1,0 +1,17 @@
+# lock files
+poetry.lock
+
+# python cache file
+__pycache__
+
+# node cache file
+node_modules
+package-lock.json
+
+# dev files
+.env
+*draft_*
+
+# IDLE (vscode) files
+.vscode
+*.http
