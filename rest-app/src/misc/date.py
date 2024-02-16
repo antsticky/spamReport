@@ -6,11 +6,22 @@ PERIODS = [
     ("day", 60 * 60 * 24),
     ("hour", 60 * 60),
     ("minute", 60),
-    ("second", 1)
+    ("second", 1),
 ]
 
 
 def human_readable_time_diff(start_time: datetime, end_time: datetime) -> str:
+    """
+    Calculate and return human-readable time difference between two datetime objects.
+
+    Args:
+        start_time (datetime): The starting datetime.
+        end_time (datetime): The ending datetime.
+
+    Returns:
+        str: A human-readable representation of the time difference between start_time and end_time.
+    """
+
     time_diff = end_time - start_time
     seconds = int(time_diff.total_seconds())
 
